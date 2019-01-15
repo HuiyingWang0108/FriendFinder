@@ -170,7 +170,8 @@
                                 <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
                                 <hr>
                                 <p class="bold"><a href="/api/friends">API Friends Link</a> |
-                                    <a href="https://github.com/clsavino/Friend-Finder---Node-and-Express-Servers" target="_blank">GitHub
+                                    <a href="https://github.com/clsavino/Friend-Finder---Node-and-Express-Servers"
+                                        target="_blank">GitHub
                                         Repo</a></p>
                             </form>
                         </div>
@@ -180,27 +181,65 @@
                 </div>
             </div>
         </div>
-      
+
     </div>
+    <div id="resultsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h2 class="modal-title"><strong>Your most compatible friend</strong></h2>
+                </div>
+                <div class="modal-body">
+                    <h2 id="matchName"></h2>
+                    <img id="matchImg" src="" alt="" height="350" width="300">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closeModal" data-dismiss="modal">Close</button>
+                </div>
+            </div>>
 </body>
 
 </html>
 <script type="text/javascript">
-$("#submit").on("click",function(event){
-    event.preventDefault();
-    var newfriends={
-        "name":$("#name").val().trim(),
-        "photo":$("#photo").val().trim(),
-        "score":[$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(), $("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
-    };
-    console.log(newfriends);
-    //post newfriends to server
-    $.post("/api/friends",newfriends);
-    
-    //get data from server
-    $.get("/api/friends",function(data){
-        console.log("data:",data);
+    $("#submit").on("click", function (event) {
+        event.preventDefault();
+        var newfriends = {
+            "name": $("#name").val().trim(),
+            "photo": $("#photo").val().trim(),
+            "scores": [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(), $("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
+        };
+        console.log(newfriends);
+        //post newfriends to server
+        $.post("/api/friends", newfriends);
+
+        //get data from server
+        $.get("/api/friends", function (data) {
+            console.log("data:", data);
+            // console.log("data:",data.length);
+            var sumScores = [];
+            for (var i = 0; i < data.length - 1; i++) {
+                sumScores[i] = 0;
+                console.log(data[i].scores);
+
+                for (var j = 0; j < data[i].scores.length; j++) {
+                    // console.log(data[i].scores[j]);
+                    // console.log(typeof newfriends.scores[j]);
+                    sumScores[i] += Math.abs(data[i].scores[j] - parseInt(newfriends.scores[j]));
+                }
+                console.log(sumScores[i]);
+            }
+            console.log(Math.min.apply(null, sumScores));
+            for (var i = 0; i < data.length - 1; i++) {
+                if (sumScores[i] == Math.min.apply(null, sumScores)) {
+                        $("#matchName").text(data[i].name);
+                        $('#matchImg').attr("src", data[i].photo);
+                        // Show the modal with the best match
+                        $("#resultsModal").modal('toggle');
+                }
+            }
+        });
+
     });
-    
-});
 </script>
