@@ -1,7 +1,7 @@
 var friendsArray=[
     {
         "name":"Joojo",
-        "photo":"",
+        "photo":"https://github.com/HuiyingWang0108/FriendFinder/blob/master/img/Jay.jpg?raw=true",
         "scores":[1,1,1,1,1,1,1,1,1,1]
     }
 ];

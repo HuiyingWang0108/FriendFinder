@@ -188,7 +188,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <!-- <button type="button" class="close" data-dismiss="modal">X</button> -->
                     <h2 class="modal-title"><strong>Your most compatible friend</strong></h2>
                 </div>
                 <div class="modal-body">
@@ -233,10 +233,15 @@
             console.log(Math.min.apply(null, sumScores));
             for (var i = 0; i < data.length - 1; i++) {
                 if (sumScores[i] == Math.min.apply(null, sumScores)) {
-                        $("#matchName").text(data[i].name);
-                        $('#matchImg').attr("src", data[i].photo);
-                        // Show the modal with the best match
-                        $("#resultsModal").modal('toggle');
+                    // Show the modal with the best match
+                    $("#matchName").text(data[i].name);
+                    console.log(data[i].photo);
+                    $('#matchImg').attr("src", data[i].photo);
+                    $("#resultsModal").modal('toggle');
+                    //clear the form
+                    $("#name").val("");
+                    $("#photo").val("");
+                    $(".chosen-select").val(1);
                 }
             }
         });
